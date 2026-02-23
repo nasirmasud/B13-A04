@@ -1,0 +1,479 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Job Application Tracker</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+      integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+      * {
+        font-family: "Outfit", sans-serif;
+      }
+    </style>
+  </head>
+  <body class="bg-[#f8fafc]">
+    <header class="w-[80%] mx-auto pt-16">
+      <h1 class="pb-5 text-5xl font-bold text-[#002c5c]">
+        Job Application Tracker
+      </h1>
+      <!-- heading job count -->
+      <div>
+        <div class="grid grid-cols-3 gap-5">
+          <div class="bg-white shadow p-4 rounded-lg">
+            <p class="text-lg">Total</p>
+            <p class="text-2xl font-bold text-[#002c5c]" id="all-job-count">
+              0
+            </p>
+          </div>
+
+          <div class="bg-white shadow p-4 rounded-lg">
+            <p class="text-lg">Interview</p>
+            <p class="text-2xl font-bold text-[#10b981]" id="interview-count">
+              0
+            </p>
+          </div>
+
+          <div class="bg-white shadow p-4 rounded-lg">
+            <p class="text-lg">Rejected</p>
+            <p class="text-2xl font-bold text-[#ef4444]" id="rejected-count">
+              0
+            </p>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <hr class="border-gray-300 w-[80%] mx-auto my-10" />
+
+    <main class="w-[80%] mx-auto">
+      <section class="job-heading flex justify-between items-center">
+        <h3 class="text-3xl font-bold text-[#002c5c]">Available Jobs</h3>
+        <p class="font-medium text-lg text-gray-600">
+          <span class="all-job-count-num">0</span> Jobs
+        </p>
+      </section>
+
+      <!-- Job Category Buttons -->
+      <section
+        class="flex justify-start items-start gap-2 py-6 job-catagory-btns"
+      >
+        <button
+          onclick="toggleStyle('show-all-btn')"
+          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-20 h-8 text-[12px]"
+          id="show-all-btn"
+        >
+          All
+        </button>
+        <button
+          onclick="toggleStyle('show-interview-btn')"
+          class="bg-transparent hover:bg-blue-500 text-gray-600 font-semibold hover:text-white py-2 px-4 border border-gray-500 hover:border-transparent rounded w-20 h-8 text-[12px]"
+          id="show-interview-btn"
+        >
+          Interview
+        </button>
+        <button
+          onclick="toggleStyle('show-rejected-btn')"
+          class="bg-transparent hover:bg-blue-500 text-gray-600 font-semibold hover:text-white py-2 px-4 border border-gray-500 hover:border-transparent rounded w-20 h-8 text-[12px]"
+          id="show-rejected-btn"
+        >
+          Rejected
+        </button>
+      </section>
+
+      <!-- Filtered Job List Items -->
+      <section id="filtered-job-card-list" class="space-y-5 hidden"></section>
+      <!-- Filtered Rejected List Items -->
+      <section
+        id="filtered-rejected-card-list"
+        class="space-y-5 hidden"
+      ></section>
+
+      <!-- Job List Items -->
+      <section id="job-card-list" class="space-y-5">
+        <!-- Job Card -->
+        <div
+          class="job-card grid grid-cols-1 sm:grid-cols-12 gap-4 items-start bg-white rounded-2xl p-6"
+        >
+          <div class="card-content col-span-1 sm:col-span-11 order-1">
+            <h4 class="company-name text-xl font-bold text-[#002c5c]">
+              Mobile First Corp
+            </h4>
+            <h5 class="job-role text-lg text-gray-600">
+              React Native Developer
+            </h5>
+            <p class="job-details text-sm text-gray-600 py-4">
+              Remote • Full-time • $130,000 - $175,000
+            </p>
+            <button
+              class="status bg-[#eef4ff] font-semibold py-2 px-4 border-0 rounded text-sm"
+            >
+              NOT APPLIED
+            </button>
+            <p class="role-details text-xs text-gray-600 py-4">
+              Build cross-platform mobile applications using React Native. Work
+              on products used by millions of users worldwide.
+            </p>
+            <div class="job-status flex flex-wrap gap-2">
+              <button
+                class="interview-btn bg-transparent hover:bg-green-500 text-green-600 font-semibold hover:text-white py-2 px-4 border border-green-500 hover:border-transparent rounded text-sm"
+              >
+                INTERVIEW
+              </button>
+              <button
+                class="rejected-btn bg-transparent hover:bg-red-500 text-red-600 font-semibold hover:text-white py-2 px-4 border border-red-500 hover:border-transparent rounded text-sm"
+              >
+                REJECTED
+              </button>
+            </div>
+          </div>
+          <div
+            class="card-delete col-span-1 sm:col-span-1 flex justify-start sm:justify-end order-2"
+          >
+            <button
+              class="delete-btn bg-transparent hover:bg-red-500 text-gray-600 hover:text-white px-3 py-2 border border-gray-400 rounded-full"
+            >
+              <i class="fa-regular fa-trash-can"></i>
+            </button>
+          </div>
+        </div>
+        <!-- Job Card -->
+        <div
+          class="job-card grid grid-cols-1 sm:grid-cols-12 gap-4 items-start bg-white rounded-2xl p-6"
+        >
+          <div class="card-content col-span-1 sm:col-span-11 order-1">
+            <h4 class="company-name text-xl font-bold text-[#002c5c]">
+              WebFlow Agency
+            </h4>
+            <h5 class="job-role text-lg text-gray-600">
+              Web Designer & Developer
+            </h5>
+            <p class="job-details text-sm text-gray-600 py-4">
+              Los Angeles, CA • Part-time • $80,000 - $120,000
+            </p>
+            <button
+              class="status bg-[#eef4ff] font-semibold py-2 px-4 border-0 rounded text-sm"
+            >
+              NOT APPLIED
+            </button>
+            <p class="role-details text-xs text-gray-600 py-4">
+              Create stunning web experiences for high-profile clients.
+            </p>
+            <div class="job-status flex flex-wrap gap-2">
+              <button
+                class="interview-btn bg-transparent hover:bg-green-500 text-green-600 font-semibold hover:text-white py-2 px-4 border border-green-500 hover:border-transparent rounded text-sm"
+              >
+                INTERVIEW
+              </button>
+              <button
+                class="rejected-btn bg-transparent hover:bg-red-500 text-red-600 font-semibold hover:text-white py-2 px-4 border border-red-500 hover:border-transparent rounded text-sm"
+              >
+                REJECTED
+              </button>
+            </div>
+          </div>
+          <div
+            class="card-delete col-span-1 sm:col-span-1 flex justify-start sm:justify-end order-2"
+          >
+            <button
+              class="delete-btn bg-transparent hover:bg-red-500 text-gray-600 hover:text-white px-3 py-2 border border-gray-400 rounded-full"
+            >
+              <i class="fa-regular fa-trash-can"></i>
+            </button>
+          </div>
+        </div>
+        <!-- Job Card -->
+        <div
+          class="job-card grid grid-cols-1 sm:grid-cols-12 gap-4 items-start bg-white rounded-2xl p-6"
+        >
+          <div class="card-content col-span-1 sm:col-span-11 order-1">
+            <h4 class="company-name text-xl font-bold text-[#002c5c]">
+              DataViz Solutions
+            </h4>
+            <h5 class="job-role text-lg text-gray-600">
+              Data Visualization Specialist
+            </h5>
+            <p class="job-details text-sm text-gray-600 py-4">
+              Boston, MA • Full-time • $125,000 - $165,000
+            </p>
+            <button
+              class="status bg-[#eef4ff] font-semibold py-2 px-4 border-0 rounded text-sm"
+            >
+              NOT APPLIED
+            </button>
+            <p class="role-details text-xs text-gray-600 py-4">
+              Transform complex data into compelling visualizations.
+            </p>
+            <div class="job-status flex flex-wrap gap-2">
+              <button
+                class="interview-btn bg-transparent hover:bg-green-500 text-green-600 font-semibold hover:text-white py-2 px-4 border border-green-500 hover:border-transparent rounded text-sm"
+              >
+                INTERVIEW
+              </button>
+              <button
+                class="rejected-btn bg-transparent hover:bg-red-500 text-red-600 font-semibold hover:text-white py-2 px-4 border border-red-500 hover:border-transparent rounded text-sm"
+              >
+                REJECTED
+              </button>
+            </div>
+          </div>
+          <div
+            class="card-delete col-span-1 sm:col-span-1 flex justify-start sm:justify-end order-2"
+          >
+            <button
+              class="delete-btn bg-transparent hover:bg-red-500 text-gray-600 hover:text-white px-3 py-2 border border-gray-400 rounded-full"
+            >
+              <i class="fa-regular fa-trash-can"></i>
+            </button>
+          </div>
+        </div>
+        <!-- Job Card -->
+        <div
+          class="job-card grid grid-cols-1 sm:grid-cols-12 gap-4 items-start bg-white rounded-2xl p-6"
+        >
+          <div class="card-content col-span-1 sm:col-span-11 order-1">
+            <h4 class="company-name text-xl font-bold text-[#002c5c]">
+              CloudFirst Inc
+            </h4>
+            <h5 class="job-role text-lg text-gray-600">Backend Developer</h5>
+            <p class="job-details text-sm text-gray-600 py-4">
+              Seattle, WA • Full-time • $140,000 - $190,000
+            </p>
+            <button
+              class="status bg-[#eef4ff] font-semibold py-2 px-4 border-0 rounded text-sm"
+            >
+              NOT APPLIED
+            </button>
+            <p class="role-details text-xs text-gray-600 py-4">
+              Design and maintain scalable backend systems using Python and AWS.
+            </p>
+            <div class="job-status flex flex-wrap gap-2">
+              <button
+                class="interview-btn bg-transparent hover:bg-green-500 text-green-600 font-semibold hover:text-white py-2 px-4 border border-green-500 hover:border-transparent rounded text-sm"
+              >
+                INTERVIEW
+              </button>
+              <button
+                class="rejected-btn bg-transparent hover:bg-red-500 text-red-600 font-semibold hover:text-white py-2 px-4 border border-red-500 hover:border-transparent rounded text-sm"
+              >
+                REJECTED
+              </button>
+            </div>
+          </div>
+          <div
+            class="card-delete col-span-1 sm:col-span-1 flex justify-start sm:justify-end order-2"
+          >
+            <button
+              class="delete-btn bg-transparent hover:bg-red-500 text-gray-600 hover:text-white px-3 py-2 border border-gray-400 rounded-full"
+            >
+              <i class="fa-regular fa-trash-can"></i>
+            </button>
+          </div>
+        </div>
+        <!-- Job Card -->
+        <div
+          class="job-card grid grid-cols-1 sm:grid-cols-12 gap-4 items-start bg-white rounded-2xl p-6"
+        >
+          <div class="card-content col-span-1 sm:col-span-11 order-1">
+            <h4 class="company-name text-xl font-bold text-[#002c5c]">
+              Innovation Labs
+            </h4>
+            <h5 class="job-role text-lg text-gray-600">UI/UX Engineer</h5>
+            <p class="job-details text-sm text-gray-600 py-4">
+              Austin, TX • Full-time • $110,000 - $150,000
+            </p>
+            <button
+              class="status bg-[#eef4ff] font-semibold py-2 px-4 border-0 rounded text-sm"
+            >
+              NOT APPLIED
+            </button>
+            <p class="role-details text-xs text-gray-600 py-4">
+              Create beautiful and functional user interfaces for our suite of
+              products.
+            </p>
+            <div class="job-status flex flex-wrap gap-2">
+              <button
+                class="interview-btn bg-transparent hover:bg-green-500 text-green-600 font-semibold hover:text-white py-2 px-4 border border-green-500 hover:border-transparent rounded text-sm"
+              >
+                INTERVIEW
+              </button>
+              <button
+                class="rejected-btn bg-transparent hover:bg-red-500 text-red-600 font-semibold hover:text-white py-2 px-4 border border-red-500 hover:border-transparent rounded text-sm"
+              >
+                REJECTED
+              </button>
+            </div>
+          </div>
+          <div
+            class="card-delete col-span-1 sm:col-span-1 flex justify-start sm:justify-end order-2"
+          >
+            <button
+              class="delete-btn bg-transparent hover:bg-red-500 text-gray-600 hover:text-white px-3 py-2 border border-gray-400 rounded-full"
+            >
+              <i class="fa-regular fa-trash-can"></i>
+            </button>
+          </div>
+        </div>
+        <!-- Job Card -->
+        <div
+          class="job-card grid grid-cols-1 sm:grid-cols-12 gap-4 items-start bg-white rounded-2xl p-6"
+        >
+          <div class="card-content col-span-1 sm:col-span-11 order-1">
+            <h4 class="company-name text-xl font-bold text-[#002c5c]">
+              MegaCorp Solutions
+            </h4>
+            <h5 class="job-role text-lg text-gray-600">JavaScript Developer</h5>
+            <p class="job-details text-sm text-gray-600 py-4">
+              New York, NY • Full-time • $130,000 - $170,00
+            </p>
+            <button
+              class="status bg-[#eef4ff] font-semibold py-2 px-4 border-0 rounded text-sm"
+            >
+              NOT APPLIED
+            </button>
+            <p class="role-details text-xs text-gray-600 py-4">
+              Build enterprise applications with JavaScript and modern
+              frameworks.
+            </p>
+            <div class="job-status flex flex-wrap gap-2">
+              <button
+                class="interview-btn bg-transparent hover:bg-green-500 text-green-600 font-semibold hover:text-white py-2 px-4 border border-green-500 hover:border-transparent rounded text-sm"
+              >
+                INTERVIEW
+              </button>
+              <button
+                class="rejected-btn bg-transparent hover:bg-red-500 text-red-600 font-semibold hover:text-white py-2 px-4 border border-red-500 hover:border-transparent rounded text-sm"
+              >
+                REJECTED
+              </button>
+            </div>
+          </div>
+          <div
+            class="card-delete col-span-1 sm:col-span-1 flex justify-start sm:justify-end order-2"
+          >
+            <button
+              class="delete-btn bg-transparent hover:bg-red-500 text-gray-600 hover:text-white px-3 py-2 border border-gray-400 rounded-full"
+            >
+              <i class="fa-regular fa-trash-can"></i>
+            </button>
+          </div>
+        </div>
+        <!-- Job Card -->
+        <div
+          class="job-card grid grid-cols-1 sm:grid-cols-12 gap-4 items-start bg-white rounded-2xl p-6"
+        >
+          <div class="card-content col-span-1 sm:col-span-11 order-1">
+            <h4 class="company-name text-xl font-bold text-[#002c5c]">
+              StartupXYZ
+            </h4>
+            <h5 class="job-role text-lg text-gray-600">Full Stack Engineer</h5>
+            <p class="job-details text-sm text-gray-600 py-4">
+              Remote • Full-time • $120,000 - $160,000
+            </p>
+            <button
+              class="status bg-[#eef4ff] font-semibold py-2 px-4 border-0 rounded text-sm"
+            >
+              NOT APPLIED
+            </button>
+            <p class="role-details text-xs text-gray-600 py-4">
+              Join our fast-growing startup and work on our core platform.
+            </p>
+            <div class="job-status flex flex-wrap gap-2">
+              <button
+                class="interview-btn bg-transparent hover:bg-green-500 text-green-600 font-semibold hover:text-white py-2 px-4 border border-green-500 hover:border-transparent rounded text-sm"
+              >
+                INTERVIEW
+              </button>
+              <button
+                class="rejected-btn bg-transparent hover:bg-red-500 text-red-600 font-semibold hover:text-white py-2 px-4 border border-red-500 hover:border-transparent rounded text-sm"
+              >
+                REJECTED
+              </button>
+            </div>
+          </div>
+          <div
+            class="card-delete col-span-1 sm:col-span-1 flex justify-start sm:justify-end order-2"
+          >
+            <button
+              class="delete-btn bg-transparent hover:bg-red-500 text-gray-600 hover:text-white px-3 py-2 border border-gray-400 rounded-full"
+            >
+              <i class="fa-regular fa-trash-can"></i>
+            </button>
+          </div>
+        </div>
+        <!-- Job Card -->
+        <div
+          class="job-card grid grid-cols-1 sm:grid-cols-12 gap-4 items-start bg-white rounded-2xl p-6"
+        >
+          <div class="card-content col-span-1 sm:col-span-11 order-1">
+            <h4 class="company-name text-xl font-bold text-[#002c5c]">
+              TechCorp Industries
+            </h4>
+            <h5 class="job-role text-lg text-gray-600">
+              Senior Frontend Developer
+            </h5>
+            <p class="job-details text-sm text-gray-600 py-4">
+              San Francisco, CA • Full-time • $130,000 - $175,000
+            </p>
+            <button
+              class="status bg-[#eef4ff] font-semibold py-2 px-4 border-0 rounded text-sm"
+            >
+              NOT APPLIED
+            </button>
+            <p class="role-details text-xs text-gray-600 py-4">
+              Build scalable web applications using React and TypeScript.
+            </p>
+            <div class="job-status flex flex-wrap gap-2">
+              <button
+                class="interview-btn bg-transparent hover:bg-green-500 text-green-600 font-semibold hover:text-white py-2 px-4 border border-green-500 hover:border-transparent rounded text-sm"
+              >
+                INTERVIEW
+              </button>
+              <button
+                class="rejected-btn bg-transparent hover:bg-red-500 text-red-600 font-semibold hover:text-white py-2 px-4 border border-red-500 hover:border-transparent rounded text-sm"
+              >
+                REJECTED
+              </button>
+            </div>
+          </div>
+          <div
+            class="card-delete col-span-1 sm:col-span-1 flex justify-start sm:justify-end order-2"
+          >
+            <button
+              class="delete-btn bg-transparent hover:bg-red-500 text-gray-600 hover:text-white px-3 py-2 border border-gray-400 rounded-full"
+            >
+              <i class="fa-regular fa-trash-can"></i>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section class="hidden">
+        <div
+          class="empty-job flex flex-col justify-center items-center bg-white rounded-2xl p-20 mb-5"
+        >
+          <img src="./jobs.png" alt="File" />
+          <h3 class="text-4xl text-[#002c5c] font-bold p-5">
+            No jobs available
+          </h3>
+          <p class="text-gray-600 text-xl">
+            Check back soon for new job opportunities
+          </p>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>
