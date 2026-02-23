@@ -77,9 +77,18 @@ function toggleStyle(id) {
 
   if (id == "show-interview-btn") {
     filteredJobCardList.classList.remove("hidden");
+    if (interviewList.length == 0) {
+      emptyJobSection.classList.remove("hidden");
+    }
   } else if (id == "show-all-btn") {
     mainJobCardList.classList.remove("hidden");
+    if (mainJobCardList.children.length == 0) {
+      emptyJobSection.classList.remove("hidden");
+    }
   } else if (id == "show-rejected-btn") {
     filteredRejectedCardList.classList.remove("hidden");
+    if (rejectedList.length == 0) {
+      emptyJobSection.classList.remove("hidden");
+    }
   }
 }
