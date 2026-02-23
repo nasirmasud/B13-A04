@@ -162,6 +162,64 @@ mainJobCardList.addEventListener("click", function (e) {
   }
 });
 
+// event listener for job card
+filteredJobCardList.addEventListener("click", function (e) {
+  if (e.target.classList.contains("rejected-btn")) {
+    const parentNode = e.target.parentNode.parentNode;
+    const companyName = parentNode.querySelector(".company-name").innerText;
+    const mainCards = mainJobCardList.querySelectorAll(".job-card");
+
+    for (cards of mainCards) {
+      if (cards.querySelector(".company-name").innerText == companyName) {
+        cards.querySelector(".status").innerText = "REJECTED";
+      }
+    }
+
+    const job = interviewList.find((iJob) => iJob.companyName == companyName);
+    if (job) {
+      job.status = "REJECTED";
+      rejectedList.push(job);
+      interviewList = interviewList.filter(
+        (iJob) => iJob.companyName != companyName,
+      );
+    }
+
+    totalJobCount();
+    renderJobCard();
+    renderRejectCard();
+    toggleStyle("show-rejected-btn");
+  }
+});
+
+// event listener for rejected card
+filteredRejectedCardList.addEventListener("click", function (e) {
+  if (e.target.classList.contains("interview-btn")) {
+    const parentNode = e.target.parentNode.parentNode;
+    const companyName = parentNode.querySelector(".company-name").innerText;
+    const mainCards = mainJobCardList.querySelectorAll(".job-card");
+
+    for (cards of mainCards) {
+      if (cards.querySelector(".company-name").innerText == companyName) {
+        cards.querySelector(".status").innerText = "INTERVIEW";
+      }
+    }
+
+    const job = rejectedList.find((rJob) => rJob.companyName == companyName);
+    if (job) {
+      job.status = "INTERVIEW";
+      interviewList.push(job);
+      rejectedList = rejectedList.filter(
+        (rJob) => rJob.companyName != companyName,
+      );
+    }
+
+    totalJobCount();
+    renderJobCard();
+    renderRejectCard();
+    toggleStyle("show-rejected-btn");
+  }
+});
+
 // render interview job card
 function renderJobCard() {
   filteredJobCardList.innerHTML = "";
@@ -189,12 +247,12 @@ function renderJobCard() {
             <p class="role-details text-xs text-gray-600 py-4">${jobs.roleDetails}</p>
             <div class="job-status flex flex-wrap gap-2">
               <button
-                class="bg-transparent hover:bg-green-500 text-green-600 font-semibold hover:text-white py-2 px-4 border border-green-500 hover:border-transparent rounded text-sm"
+                class="interview-btn bg-transparent hover:bg-green-500 text-green-600 font-semibold hover:text-white py-2 px-4 border border-green-500 hover:border-transparent rounded text-sm"
               >
                 INTERVIEW
               </button>
               <button
-                class="bg-transparent hover:bg-red-500 text-red-600 font-semibold hover:text-white py-2 px-4 border border-red-500 hover:border-transparent rounded text-sm"
+                class="rejected-btn bg-transparent hover:bg-red-500 text-red-600 font-semibold hover:text-white py-2 px-4 border border-red-500 hover:border-transparent rounded text-sm"
               >
                 REJECTED
               </button>
@@ -241,12 +299,12 @@ function renderRejectCard() {
             <p class="role-details text-xs text-gray-600 py-4">${jobs.roleDetails}</p>
             <div class="job-status flex flex-wrap gap-2">
               <button
-                class="bg-transparent hover:bg-green-500 text-green-600 font-semibold hover:text-white py-2 px-4 border border-green-500 hover:border-transparent rounded text-sm"
+                class="interview-btn bg-transparent hover:bg-green-500 text-green-600 font-semibold hover:text-white py-2 px-4 border border-green-500 hover:border-transparent rounded text-sm"
               >
                 INTERVIEW
               </button>
               <button
-                class="bg-transparent hover:bg-red-500 text-red-600 font-semibold hover:text-white py-2 px-4 border border-red-500 hover:border-transparent rounded text-sm"
+                class="rejected-btn bg-transparent hover:bg-red-500 text-red-600 font-semibold hover:text-white py-2 px-4 border border-red-500 hover:border-transparent rounded text-sm"
               >
                 REJECTED
               </button>
