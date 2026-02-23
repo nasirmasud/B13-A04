@@ -32,3 +32,54 @@ function totalJobCount() {
   rejectedCount.innerText = rejectedList.length;
 }
 totalJobCount();
+
+// button toggle style
+function toggleStyle(id) {
+  allJobCountBtn.classList.remove("bg-blue-500", "text-white");
+  interviewCountBtn.classList.remove("bg-blue-500", "text-white");
+  rejectedCountBtn.classList.remove("bg-blue-500", "text-white");
+
+  allJobCountBtn.classList.add(
+    "bg-transparent",
+    "text-gray-600",
+    "border",
+    "border-gray-500",
+  );
+  interviewCountBtn.classList.add(
+    "bg-transparent",
+    "text-gray-600",
+    "border",
+    "border-gray-500",
+  );
+  rejectedCountBtn.classList.add(
+    "bg-transparent",
+    "text-gray-600",
+    "border",
+    "border-gray-500",
+  );
+
+  // active button
+  document.getElementById(id).classList.add("bg-blue-500", "text-white");
+  document
+    .getElementById(id)
+    .classList.remove(
+      "bg-transparent",
+      "text-gray-600",
+      "border",
+      "border-gray-500",
+    );
+
+  // section show hide
+  mainJobCardList.classList.add("hidden");
+  filteredJobCardList.classList.add("hidden");
+  filteredRejectedCardList.classList.add("hidden");
+  emptyJobSection.classList.add("hidden");
+
+  if (id == "show-interview-btn") {
+    filteredJobCardList.classList.remove("hidden");
+  } else if (id == "show-all-btn") {
+    mainJobCardList.classList.remove("hidden");
+  } else if (id == "show-rejected-btn") {
+    filteredRejectedCardList.classList.remove("hidden");
+  }
+}
