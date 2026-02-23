@@ -159,6 +159,26 @@ mainJobCardList.addEventListener("click", function (e) {
     totalJobCount();
     renderJobCard();
     renderRejectCard();
+  } else if (
+    e.target.classList.contains("delete-btn") ||
+    e.target.classList.contains("fa-trash-can")
+  ) {
+    let card = e.target.classList.contains("fa-trash-can")
+      ? e.target.parentNode.parentNode.parentNode
+      : e.target.parentNode.parentNode;
+
+    const companyName = card.querySelector(".company-name").innerText;
+    card.remove();
+    interviewList = interviewList.filter(
+      (item) => item.companyName != companyName,
+    );
+    rejectedList = rejectedList.filter(
+      (item) => item.companyName != companyName,
+    );
+
+    totalJobCount();
+    renderJobCard();
+    renderRejectCard();
   }
 });
 
