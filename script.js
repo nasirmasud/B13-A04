@@ -169,6 +169,9 @@ mainJobCardList.addEventListener("click", function (e) {
 
     const companyName = card.querySelector(".company-name").innerText;
     card.remove();
+    if (mainJobCardList.children.length === 0)
+      emptyJobSection.classList.remove("hidden");
+
     interviewList = interviewList.filter(
       (item) => item.companyName != companyName,
     );
@@ -184,60 +187,94 @@ mainJobCardList.addEventListener("click", function (e) {
 
 // event listener for job card
 filteredJobCardList.addEventListener("click", function (e) {
-  if (e.target.classList.contains("rejected-btn")) {
-    const parentNode = e.target.parentNode.parentNode;
-    const companyName = parentNode.querySelector(".company-name").innerText;
-    const mainCards = mainJobCardList.querySelectorAll(".job-card");
+  let card = e.target.classList.contains("fa-trash-can")
+    ? e.target.parentNode.parentNode.parentNode
+    : e.target.parentNode.parentNode;
 
-    for (cards of mainCards) {
-      if (cards.querySelector(".company-name").innerText == companyName) {
-        cards.querySelector(".status").innerText = "REJECTED";
-      }
+  if (!card.querySelector(".company-name")) return;
+  const companyName = card.querySelector(".company-name").innerText;
+
+  if (e.target.classList.contains("rejected-btn")) {
+    const mainCards = mainJobCardList.querySelectorAll(".job-card");
+    for (let card of mainCards) {
+      if (card.querySelector(".company-name").innerText == companyName)
+        card.querySelector(".status").innerText = "REJECTED";
     }
 
     const job = interviewList.find((iJob) => iJob.companyName == companyName);
     if (job) {
       job.status = "REJECTED";
       rejectedList.push(job);
-      interviewList = interviewList.filter(
-        (iJob) => iJob.companyName != companyName,
-      );
     }
+    interviewList = interviewList.filter(
+      (iJob) => iJob.companyName != companyName,
+    );
 
     totalJobCount();
     renderJobCard();
     renderRejectCard();
-    toggleStyle("show-rejected-btn");
+    toggleStyle("show-interview-btn");
+  } else if (
+    e.target.classList.contains("delete-btn") ||
+    e.target.classList.contains("fa-trash-can")
+  ) {
+    const mainCards = mainJobCardList.querySelectorAll(".job-card");
+    for (let card of mainCards) {
+      if (card.querySelector(".company-name").innerText == companyName)
+        card.remove();
+    }
+
+    interviewList = interviewList.filter(
+      (iJob) => iJob.companyName != companyName,
+    );
+
+    totalJobCount();
+    renderJobCard();
+    renderRejectCard();
+    toggleStyle("show-interview-btn");
   }
 });
 
-// event listener for rejected card
+// event listener for rejected job card
 filteredRejectedCardList.addEventListener("click", function (e) {
+  let card = e.target.classList.contains("fa-trash-can")
+    ? e.target.parentNode.parentNode.parentNode
+    : e.target.parentNode.parentNode;
+  if (!card.querySelector(".company-name")) return;
+  const companyName = card.querySelector(".company-name").innerText;
+
   if (e.target.classList.contains("interview-btn")) {
-    const parentNode = e.target.parentNode.parentNode;
-    const companyName = parentNode.querySelector(".company-name").innerText;
     const mainCards = mainJobCardList.querySelectorAll(".job-card");
-
-    for (cards of mainCards) {
-      if (cards.querySelector(".company-name").innerText == companyName) {
-        cards.querySelector(".status").innerText = "INTERVIEW";
-      }
+    for (let card of mainCards) {
+      if (card.querySelector(".company-name").innerText == companyName)
+        card.querySelector(".status").innerText = "INTERVIEW";
     }
-
     const job = rejectedList.find((rJob) => rJob.companyName == companyName);
     if (job) {
       job.status = "INTERVIEW";
       interviewList.push(job);
-      rejectedList = rejectedList.filter(
-        (rJob) => rJob.companyName != companyName,
-      );
     }
-
-    totalJobCount();
-    renderJobCard();
-    renderRejectCard();
-    toggleStyle("show-rejected-btn");
+    rejectedList = rejectedList.filter(
+      (rJob) => rJob.companyName != companyName,
+    );
+  } else if (
+    e.target.classList.contains("delete-btn") ||
+    e.target.classList.contains("fa-trash-can")
+  ) {
+    const mainCards = mainJobCardList.querySelectorAll(".job-card");
+    for (let card of mainCards) {
+      if (card.querySelector(".company-name").innerText == companyName)
+        card.remove();
+    }
+    rejectedList = rejectedList.filter(
+      (rJob) => rJob.companyName != companyName,
+    );
   }
+
+  totalJobCount();
+  renderJobCard();
+  renderRejectCard();
+  toggleStyle("show-rejected-btn");
 });
 
 // render interview job card
